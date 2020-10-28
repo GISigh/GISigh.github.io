@@ -11,7 +11,14 @@
 		<meta name="keywords" content="keywords,here">
 		<link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet"> <!--Replace with your tailwind.css once created-->
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" rel="stylesheet">
-		
+			
+		<script src="jquery.js"></script> 
+        <script> 
+			$(function(){
+			  $("#includedContent").load("election.html"); 
+			});
+			</script> 
+  </head> 	
 </head>
 <body class="bg-gray-200 font-sans leading-normal tracking-normal">
 
@@ -64,7 +71,7 @@
 				<div class="flex h-full bg-white rounded overflow-hidden shadow-lg">
 					<a href="election.html" class="flex flex-wrap no-underline hover:no-underline">
 						<div class="w-full md:w-2/3 rounded-t">	
-						
+							<img src="includedContent" class="h-full w-full shadow">
 						</div>
 
 						<div class="w-full md:w-1/3 flex flex-col flex-grow flex-shrink">
