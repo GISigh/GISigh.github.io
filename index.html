@@ -29,9 +29,7 @@
 
 	<!-- Load the element definition -->
 	<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
-<style>
-    #myFrame { width:100%; height:100%; }
-</style>
+
 		
 </head>
 <body class="bg-gray-200 font-sans leading-normal tracking-normal">
@@ -91,7 +89,7 @@
 						<p class="w-full text-gray-600 text-xs md:text-sm pt-6 px-6"></p>
 						
 						<p><div class="w-full font-bold text-xl text-gray-900 px-6">👋 October 28, 2020: Predicting the US Presidential Election</div></p>
-						<div style="text-align:center"><iframe src="election_oct28.html" id="myFrame"></iframe></div>
+						<div style="text-align:center"><iframe style="iframe " src="election_oct28.html" id="myFrame"></iframe></div>
 						
 						<p><div class="w-full font-bold text-xl text-gray-900 px-6">Making the map</div></p>
 						
@@ -110,7 +108,8 @@
 							
 							<p class="text-gray-800 font-serif text-base px-6 mb-5">
 								Some election polls are better than others based on various factors like sampling design. I don't have any idea which ones are better, so I relied on 538's rankings. These are conveniently already in the dataset. So, I created a weighting scheme based on the letter grade, which can be seen in the below code snippet. It's pretty straight forward. An A+ is weighted more heavily than a poll with a C rating. See the code snippet below #Rank Weighting. 
-I also applied a weighted decay function of 30 days. This basically means that more recent days have the most impact, but as far back as 30 days still have some impact on weighting. This allows us to consider most recent polls, but not toss out the other polls for 30 days. 
+								I also applied a weighted decay function of 30 days. This basically means that more recent days have the most impact, but as far back as 30 days still have some impact on weighting. 
+								This allows us to consider most recent polls, but not toss out the other polls for 30 days. 
  </p>
 							
 							<div style="text-align:center"><iframe style="border: 0; width:100%; height: 700px; overflow: auto;" src="cell2.html"></iframe></div>
@@ -129,7 +128,7 @@ I also applied a weighted decay function of 30 days. This basically means that m
 								<p class="text-gray-800 font-serif text-base px-6 mb-5">There are a number of other models I could have run, but ARIMA is a pretty solid first go for Time Series.  </p>
 </p>
 							
-							<div style="text-align:center"><iframe style="border: 0; width:100%; height: 800px; overflow: auto;" src="cell3.html"></iframe></div>
+							<div style="text-align:center"><iframe style="iframe" src="cell3.html"></iframe></div>
 							
 							<p><div class="w-full font-italic text-xl text-gray-700 px-6">Some Simple Bayes</div></p>
 							<p class="text-gray-800 font-serif text-base px-6 mb-5">
