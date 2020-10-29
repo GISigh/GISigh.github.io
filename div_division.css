@@ -8,3 +8,19 @@
 .block {
   width: 100px;
 }
+
+.no-style-h1 {
+    font-size: unset !important;
+    font-family: unset !important;
+    font-weight: unset !important;
+    font-style: unset !important;
+    text-transform: unset !important;
+    margin-top: unset !important;
+    margin-bottom: unset !important;
+    font-family: unset !important;
+    line-height: unset !important;
+    color: unset !important;
+    margin: unset !important;
+    display: unset !important;
+  
+}

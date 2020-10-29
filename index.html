@@ -13,9 +13,28 @@
 		<link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet"> <!--Replace with your tailwind.css once created-->
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="div_division.css">
+		<script type="text/javascript" src="path/to/scripts/shCore.js"></script>
+    <script type="text/javascript" src="path/to/scripts/shBrushPython.js"></script>
+    <script type="text/javascript" src="path/to/scripts/shBrushRuby.js"></script>
+    <link type="text/css" rel="stylesheet" href="path/to/css/shCore.css"/>
+    <link type="text/css" rel="stylesheet" href="path/to/css/shThemeDefault.css"/>
+    <script type="text/javascript">
+        SyntaxHighlighter.config.clipboardSwf = 'path/to/scripts/clipboard.swf';
+        SyntaxHighlighter.all();
+    </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+	  <!-- Lightweight client-side loader that feature-detects and load polyfills only when necessary -->
+	<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+
+	<!-- Load the element definition -->
+	<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
+
 		
 </head>
 <body class="bg-gray-200 font-sans leading-normal tracking-normal">
+
+	 
 
 	<!--Header-->
 	<div class="w-full m-0 p-0 bg-cover bg-bottom" style="background-image:url('cover.jpg'); height: 60vh; max-height:460px;">
@@ -68,6 +87,82 @@
 						
 						<div class="w-full md:w-3/3 flex flex-col flex-grow flex-shrink">
 						<p class="w-full text-gray-600 text-xs md:text-sm pt-6 px-6"></p>
+						
+						<p><div class="w-full font-bold text-xl text-gray-900 px-6">👋 October 28, 2020: Predicting the US Presidential Election</div></p>
+						<div style="text-align:center"><iframe style="border: 0; width:100%; height: 600px; overflow: auto;" src="election_oct28.html"></iframe></div>
+						
+						<p><div class="w-full font-bold text-xl text-gray-900 px-6">Making the map</div></p>
+						
+						<p class="text-gray-800 font-serif text-base px-6 mb-5">Well, it doesn't look like much changed today, but here's a bit about how I made the above map.</p>
+						
+						<p><div class="w-full font-italic text-xl text-gray-700 px-6">Pulling the data from 538</div></p>
+						
+						
+							<p class="text-gray-800 font-serif text-base px-6 mb-5">
+								 First, I input the moduls I'll need. Then I pull the data from 538 and put it
+									in a pandas dataframe. The nice thing about pulling the data from 538 is that I don't have to download it each day. The script takes care of that and it's easy peasy. </p>
+							<div style="text-align:center"><iframe style="border: 0; width:100%; height: 400px; overflow: auto;" src="cell1.html"></iframe></div>					
+							
+							<p> </p>
+							<p><div class="w-full font-italic text-xl text-gray-700 px-6">Weighting the polls and time</div></p>
+							
+							<p class="text-gray-800 font-serif text-base px-6 mb-5">
+								Some election polls are better than others based on various factors like sampling design. I don't have any idea which ones are better, so I relied on 538's rankings. These are conveniently already in the dataset. So, I created a weighting scheme based on the letter grade, which can be seen in the below code snippet. It's pretty straight forward. An A+ is weighted more heavily than a poll with a C rating. See the code snippet below #Rank Weighting. 
+I also applied a weighted decay function of 30 days. This basically means that more recent days have the most impact, but as far back as 30 days still have some impact on weighting. This allows us to consider most recent polls, but not toss out the other polls for 30 days. 
+ </p>
+							
+							<div style="text-align:center"><iframe style="border: 0; width:100%; height: 700px; overflow: auto;" src="cell2.html"></iframe></div>
+							
+							<p><div class="w-full font-italic text-xl text-gray-700 px-6">The ARIMA Model</div></p>
+							<p class="text-gray-800 font-serif text-base px-6 mb-5">
+								Much like the master bedroom in MTV’s Cribs, the ARIMA model is where the magic happens. 
+								I iterate through each state and apply the weighting from above. 
+								I separate the Biden and Trump from each other in each state, which I think they’d both appreciate, and do some smoothing using a 7 day moving average. 
+								I then run the ARIMA model using an Auto_Arima function, which makes life easy because I don’t have to make any choices. 
+								The function runs a number of scenarios and chooses the one with lowest AIC. Again, Auto_Arima is run on each state and each candidate independently. 
+								Interestingly, this is how 538 runs their model (state by state), the Economist uses National Polling. 
+								I’m a bit little skeptical of using National Polls, but they make a nice case for it <a href = "https://projects.economist.com/us-2020-forecast/president/how-this-works"> 
+								<b>here.</b></a>
+
+								<p class="text-gray-800 font-serif text-base px-6 mb-5">There are a number of other models I could have run, but ARIMA is a pretty solid first go for Time Series.  </p>
+</p>
+							
+							<div style="text-align:center"><iframe style="border: 0; width:100%; height: 800px; overflow: auto;" src="cell3.html"></iframe></div>
+							
+							<p><div class="w-full font-italic text-xl text-gray-700 px-6">Some Simple Bayes</div></p>
+							<p class="text-gray-800 font-serif text-base px-6 mb-5">
+								 Now that I’ve run the ARIMA models and made some predictions on the percentage of votes for each state for Biden and Trump, I use those as my likelihoods in a simple Bayesian model.
+								 This is about as simple a Bayes model as there is. I use those state likelihoods and pulled in some more data from 538 to use as my priors. 
+								 Specifically, I use Vote Share of Incumbent and Vote Share of Challenger as my priors for each state. 
+								 Determining these values on my own would take a lot of heavy lifting, so I cheat or “leverage” (as the kids say) some of 538’s heavy lifting.
+								 With those data it’s easy to compute the probability of each candidate winning a state. You’ll notice that a state like Illinois is probably woefully underestimated. 
+								 I chose the vote shares as a conservative estimate. 
+								Still, in the end, my outcome is very close to that of 538, which isn’t bad for a short exercise. 
+
+
+								
+</p>
+							
+							<div style="text-align:center"><iframe style="border: 0; width:100%; height: 800px; overflow: auto;" src="cell4.html"></iframe></div>
+							
+							<p><div class="w-full font-italic text-xl text-gray-700 px-6">The Actual Mapping</div></p>
+							<p class="text-gray-800 font-serif text-base px-6 mb-5">
+								 Everything up to this point was data preparation to input to the map. 
+								 If you’ve read this far (gods bless you) you’ve probably noticed that I was using geopandas, which pretty much has the same functionality as a normal pandas dataframe, 
+								 but with the added bonus of being geographically located. With a little wrangling and the <a href = "https://bokeh.org/"> 
+								<b>Bokeh </b></a>package it’s pretty easy to make a pretty decent map. 
+								 
+								 <p class="text-gray-800 font-serif text-base px-6 mb-5">And since this is all automated, I can run it every day until the election and see if there have been any big changes. </p>
+
+</p>
+							
+							<div style="text-align:center"><iframe style="border: 0; width:100%; height: 800px; overflow: auto;" src="cell4.html"></iframe></div>
+							
+							<div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow-lg">
+						
+						</div>
+						
+						<!-- Write your comments here --------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 						<div class="w-full font-bold text-xl text-gray-900 px-6">👋 October 27, 2020: Predicting the US Presidential Election</div>
 							<div style="text-align:center"><iframe style="border: 0; width:100%; height: 600px; overflow: auto;" src="election.html"></iframe></div>
 							<div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow-lg">
@@ -88,6 +183,8 @@
 									To get Bayesian priors for each candidate winning the state, I again turned to 538 
 									<a href = "https://projects.fivethirtyeight.com/2020-general-data/presidential_state_toplines_2020.csv">
 									<b>here.</b></p>
+									
+								
 									
 									<p class="text-gray-800 font-serif text-base px-6 mb-5">
 									I used the Vote share of the incumbent (Trump) and Vote share of the challenger (Biden) for each state as a Bayesian prior. 
